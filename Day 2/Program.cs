@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
+using System.Text.RegularExpressions;
 
 namespace Day_2
 {
@@ -37,7 +39,6 @@ namespace Day_2
         private int Maximum { get; set; }
         private char Letter { get; set; }
         private string Password { get; set; }
-
         public PasswordData (string rawInput)
         {
             var dashIndex = rawInput.IndexOf('-');
@@ -51,19 +52,35 @@ namespace Day_2
 
         public bool IsPasswordValid()
         {
-            var count = 0;
-            foreach (char c in Password)
-            {
-                if (c == Letter)
-                {
-                    count++;
-                }
-            }
+            var count = Password.Occurrences(Letter);
             return count >= Minimum && count <= Maximum;
         }
+        
         public bool IsPasswordValid2()
         {
             return (Password[Minimum - 1] == Letter || Password[Maximum - 1] == Letter) && Password[Minimum - 1] != Password[Maximum - 1];
+        }
+    }
+    
+    public static class Extensionmethods {
+        /// <summary>
+        /// Counts the number of times a character occurs within a string.
+        /// </summary>
+        /// <param name="str"></param>
+        /// <param name="character">Character to count.</param>
+        /// <returns>Count of occurrences of character.</returns>
+        public static int Occurrences(this String str, char character)
+        {
+            int counter = 0;
+            
+            foreach (char c in str)
+            {
+                if (c == character)
+                {
+                    counter++;
+                }
+            }
+            return counter;
         }
     }
 }
